@@ -1,35 +1,20 @@
-# Recherche d'appartements à Genève
+# Recherche d'appartements à Genève, Nyon et Rolle
 
-Ce dépôt contient le skill `SKILL.md` pour rechercher des appartements à Genève et dans les communes voisines, comparer les annonces et préparer un dossier de candidature.
+Le skill de ce dépôt recherche des appartements dans un rayon approximatif de 7 km autour de Genève, Nyon et Rolle.
 
-## Ce que le skill fait
+## Critères par défaut
 
-- recherche guidée selon des critères personnalisés ;
-- comparaison et classement transparents des annonces ;
-- détection des doublons et signaux de risque ;
-- préparation d'une checklist de dossier ;
-- rédaction d'un e-mail ou d'une lettre de candidature ;
-- protection des données personnelles et validation avant tout envoi.
+- budget maximal : 3 200 CHF par mois ;
+- balcon obligatoire ;
+- logement très lumineux ;
+- priorité aux Eaux-Vives ;
+- commodités idéalement proches ;
+- liens des recherches et liens directs des annonces retournés dans la réponse.
 
-## Démarrage rapide
+Le nombre de pièces, la surface et la date d'entrée restent à préciser pour affiner les résultats.
 
-1. Ouvrir `SKILL.md` dans l'environnement qui utilise les skills.
-2. Donner les critères obligatoires et préférés, par exemple :
+## Exemple de demande
 
-   > Je cherche un 3 pièces à Genève ou Carouge, budget maximal de 2 200 CHF charges comprises, entrée dès le 1er décembre, proche des transports, avec balcon.
+> Recherche des appartements à Genève, Nyon et Rolle dans un rayon d'environ 7 km, maximum 3 200 CHF charges comprises, très lumineux, avec au moins un balcon. Priorité aux Eaux-Vives et aux commodités proches. Retourne les liens de recherche et les liens directs des annonces.
 
-3. Pour la préparation du dossier, préciser les documents déjà disponibles et ceux qui peuvent être transmis.
-4. Relire et valider manuellement toute information et tout message avant envoi.
-
-## Informations utiles à fournir
-
-- communes ou quartiers acceptés ;
-- nombre de pièces et surface minimale ;
-- budget maximal, charges et parking inclus ou non ;
-- date d'entrée et durée souhaitée ;
-- statut professionnel et composition du ménage ;
-- animaux, fumeur/non-fumeur et autres contraintes ;
-- distance maximale d'un arrêt ou du lieu de travail ;
-- critères rédhibitoires et critères simplement préférés.
-
-Le skill ne fabrique aucun justificatif et ne transmet aucun document sans confirmation explicite.
+Le skill doit distinguer les critères confirmés des éléments à vérifier et ne doit pas inventer de lien d'annonce.

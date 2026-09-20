@@ -1,78 +1,100 @@
-# Skill — Recherche d'appartements à Genève
+# Skill — Recherche d'appartements à Genève, Nyon et Rolle
 
-Ce skill aide à trouver des logements à Genève et dans les communes voisines, à comparer les annonces et à préparer un dossier de candidature prêt à envoyer.
+Ce skill recherche des appartements correspondant au profil par défaut ci-dessous, puis retourne les liens directs vers les annonces et les liens des recherches utilisées.
 
-## Capacités
+## Profil de recherche par défaut
 
-- Clarifier les critères de recherche : budget, communes, date d'entrée, surface, pièces, étage, ascenseur, balcon, parking, animaux, transports et contraintes particulières.
-- Rechercher des annonces publiques sur le web et conserver l'URL, la date de consultation et les informations visibles.
-- Dédupliquer les annonces et signaler les informations manquantes, incohérences ou risques d'arnaque.
-- Classer les résultats selon une note explicable, sans inventer les données absentes.
-- Produire un tableau comparatif exportable en Markdown ou CSV.
-- Générer un dossier de candidature personnalisé : checklist, lettre de motivation, résumé candidat et noms de fichiers cohérents.
-- Vérifier le dossier avant envoi et rappeler les données sensibles qui ne doivent pas être transmises inutilement.
+Les critères suivants sont obligatoires, sauf indication contraire de l'utilisateur :
 
-## Utilisation
+- **Zones principales :** Genève, Nyon et Rolle.
+- **Périmètre :** environ 7 km autour de chacune de ces villes. Le skill doit indiquer la distance ou la commune lorsque celle-ci est vérifiable ; il ne doit pas présenter une commune comme étant dans le périmètre sans vérification.
+- **Budget maximal :** 3 200 CHF par mois au total, de préférence charges comprises. Si l'annonce sépare le loyer et les charges, additionner uniquement les montants explicitement indiqués et signaler les charges inconnues.
+- **Luminosité :** appartement très lumineux. Ce critère est considéré comme confirmé seulement si l'annonce mentionne par exemple « très lumineux », « lumineux », « plein sud », « traversant », une bonne exposition ou de grandes baies vitrées. Sinon, le statut est `à vérifier lors de la visite`.
+- **Balcon :** au moins un balcon obligatoire. Une terrasse, une loggia ou un jardin ne remplace pas automatiquement un balcon ; préciser le type d'extérieur indiqué par l'annonce.
+- **Préférence géographique :** Les Eaux-Vives à Genève.
+- **Commodités :** proximité souhaitée des commerces, transports publics, écoles, services et éventuellement du bord du lac. Ne pas inventer la distance : utiliser l'information publique de l'annonce ou une carte et marquer la source.
 
-Exemples :
+Les critères sans information fournie par l'utilisateur — pièces, surface, date d'entrée, meublé, parking, ascenseur, animaux, durée et composition du ménage — doivent être demandés avant un classement définitif ou marqués `non spécifiés`.
 
-- `Je cherche un 3 pièces à Genève, maximum 2 200 CHF charges comprises, dès le 1er décembre.`
-- `Recherche dans Carouge, Lancy, Onex et Genève, proche d'un tram, avec balcon et sans agence si possible.`
-- `Analyse ces annonces et classe-les selon mes critères : ...`
-- `Prépare mon dossier pour l'annonce X à partir des documents que je fournis.`
-- `Vérifie que mon dossier est complet et rédige le message de candidature.`
+## Sortie obligatoire : liens des recherches
 
-## Déroulement recommandé
+Pour chaque zone (Genève / Les Eaux-Vives, Nyon, Rolle), le skill doit retourner :
 
-1. **Profil et contraintes**
-   - Demander uniquement les informations nécessaires.
-   - Distinguer les critères obligatoires, préférés et rédhibitoires.
-   - Confirmer la devise, le budget maximal et si les charges/parking sont inclus.
+1. **Un lien de recherche web** construit à partir des critères actuels, par exemple une URL de recherche encodée vers un moteur de recherche. Le lien doit contenir les termes utiles : ville, rayon approximatif, budget maximal, balcon et luminosité.
+2. **Les liens vers les pages de recherche des portails effectivement consultés**, lorsque ces liens sont disponibles publiquement.
+3. **Le lien direct de chaque annonce retenue**, avec le titre, le prix, la source et la date de consultation.
+4. **Un avertissement clair** lorsque le lien est une page de résultats plutôt qu'une annonce précise, ou lorsque le portail exige une connexion.
 
-2. **Recherche**
-   - Utiliser des recherches web ciblées par commune, type de logement et budget.
-   - Respecter les conditions d'utilisation des sites et ne pas contourner les protections anti-robots, les connexions ou les captchas.
-   - Ne pas prétendre avoir accès à des annonces privées ou à des données derrière authentification.
-   - Pour chaque annonce, relever : titre, URL, source, date de consultation, loyer net, charges, total annoncé, pièces, surface, adresse/quartier, disponibilité, étage, équipements, bailleur/régie et contact lorsqu'ils sont publics.
+Ne jamais fabriquer un lien d'annonce. Si une URL ne peut pas être vérifiée, retourner le lien de recherche et indiquer `lien direct non vérifié`.
 
-3. **Validation et classement**
-   - Marquer chaque valeur comme `confirmée`, `déduite` ou `inconnue`.
-   - Ne jamais déduire une adresse exacte, un montant ou une disponibilité à partir d'une information ambiguë.
-   - Détecter les doublons avec l'URL, le titre, le prix et les caractéristiques.
-   - Signaler les demandes de paiement avant visite, les coordonnées incohérentes, les prix anormalement bas et les demandes de documents sensibles sur un canal non vérifié. Ne pas déclarer une fraude avec certitude sans preuve.
-   - Utiliser par défaut la pondération suivante, à ajuster avec l'utilisateur : budget 30 %, emplacement/transports 25 %, date d'entrée 15 %, surface/pièces 15 %, équipements 10 %, qualité des informations 5 %.
+Format attendu :
 
-4. **Dossier**
-   - Demander à l'utilisateur quels documents ils possèdent avant de produire la checklist.
-   - Préparer une checklist adaptée au bailleur/régie et à la situation personnelle ; les exigences peuvent varier.
-   - Ne pas fabriquer d'attestation, de fiche de salaire, de signature ou d'information personnelle.
-   - Préparer des versions avec les données sensibles minimisées lorsque c'est acceptable.
-   - Garder les documents dans un dossier local privé, avec des noms sans données sensibles, par exemple `01_identite.pdf`, `02_revenus.pdf`, `03_attestation_poursuites.pdf`.
+```markdown
+## Liens de recherche
 
-5. **Sorties**
-   Produire, selon la demande :
-   - un tableau de résultats ;
-   - un tableau des critères manquants ;
-   - une checklist du dossier ;
-   - une lettre de motivation ou un e-mail en français, sobre et personnalisé ;
-   - une fiche récapitulative du candidat ;
-   - une liste des prochaines actions et des échéances.
+### Genève — priorité Les Eaux-Vives
+- Recherche web : [ouvrir la recherche](URL)
+- Portails consultés : [portail](URL)
 
-## Format du tableau d'annonces
+### Nyon (rayon ~7 km)
+- Recherche web : [ouvrir la recherche](URL)
+- Portails consultés : [portail](URL)
 
-| Score | Annonce | Loyer total | Pièces/surface | Commune/quartier | Entrée | Transports | Source et date | Statut |
-|---:|---|---:|---|---|---|---|---|---|
+### Rolle (rayon ~7 km)
+- Recherche web : [ouvrir la recherche](URL)
+- Portails consultés : [portail](URL)
 
-Le score doit être accompagné de deux ou trois raisons positives et des points à vérifier.
+## Annonces retenues
+| Zone | Annonce | Loyer total | Balcon | Luminosité | Commodités | Lien direct | Vérification |
+|---|---|---:|---|---|---|---|---|
+```
 
-## Protection des données
+Les liens doivent être placés avant le tableau afin que l'utilisateur puisse refaire la recherche lui-même.
 
-- Traiter les pièces d'identité, revenus, coordonnées bancaires et attestations comme hautement sensibles.
-- Ne pas afficher de numéro complet, date de naissance, numéro AVS ou coordonnées bancaires dans un tableau de comparaison.
-- Ne pas envoyer automatiquement un dossier ou un e-mail : demander une confirmation explicite avant tout envoi.
-- Vérifier le destinataire, l'annonce et les pièces jointes avant l'envoi.
-- Respecter les demandes de suppression et ne conserver que les informations nécessaires à la recherche.
+## Méthode de recherche
 
-## Limites
+1. Construire une recherche séparée pour Genève/Les Eaux-Vives, Nyon et Rolle.
+2. Rechercher sur plusieurs sources publiques autorisées ; ne pas contourner les captchas, authentifications, limitations ou protections anti-robots.
+3. Filtrer d'abord les annonces dépassant 3 200 CHF de coût mensuel annoncé.
+4. Éliminer les annonces sans balcon explicitement mentionné, sauf si elles sont placées dans une section `à vérifier` à la demande de l'utilisateur.
+5. Classer ensuite les annonces selon la luminosité, la proximité des commodités, l'emplacement et la qualité des informations.
+6. Dédupliquer les annonces publiées sur plusieurs portails.
+7. Pour chaque résultat, conserver : URL, source, date de consultation, loyer net, charges, total, ville/quartier, distance au centre si disponible, surface, pièces, disponibilité, balcon, indices de luminosité, commodités et informations manquantes.
 
-Le skill fournit une aide à la recherche et à la préparation administrative ; il ne garantit ni la disponibilité d'un logement, ni l'acceptation du dossier, ni l'exactitude d'une annonce. Les exigences légales et celles des régies doivent être vérifiées auprès de la source officielle ou du bailleur.
+## Classement
+
+Par défaut, utiliser cette pondération après les filtres obligatoires :
+
+- 30 % : coût mensuel et respect du budget ;
+- 25 % : emplacement, avec bonus pour Les Eaux-Vives ;
+- 20 % : indices de luminosité ;
+- 15 % : commodités et transports ;
+- 10 % : qualité et complétude de l'annonce.
+
+Le score ne doit jamais transformer une information inconnue en information positive. Chaque annonce doit comporter deux ou trois raisons de son classement et les éléments à vérifier lors de la visite.
+
+## Recherche web et liens
+
+Les liens de recherche doivent être générés avec une URL correctement encodée. Exemple de modèle :
+
+```text
+https://www.google.com/search?q=appartement+balcon+lumineux+Genève+Les+Eaux-Vives+CHF+3200
+```
+
+Adapter la requête à chaque zone et ajouter `rayon 7 km`, `charges comprises`, `commodités` ou des synonymes pertinents. Ce lien est un point de départ et ne garantit pas que tous les résultats respectent les critères.
+
+## Sécurité et données personnelles
+
+- Ne pas inclure de données personnelles dans les URL de recherche.
+- Ne pas demander ni exposer de numéro AVS, coordonnées bancaires ou numéro complet de pièce d'identité.
+- Ne pas envoyer automatiquement une candidature ou un dossier ; demander une confirmation explicite.
+- Signaler les demandes de paiement avant visite et les demandes de documents sensibles sur un canal non vérifié.
+
+## Questions à poser avant la première recherche, si inconnues
+
+- Combien de pièces et quelle surface minimale ?
+- Le plafond de 3 200 CHF inclut-il impérativement les charges, le parking et les frais accessoires ?
+- Quelle date d'entrée et quelle durée de bail ?
+- Meublé ou non meublé ?
+- Animaux, parking, ascenseur et étage sont-ils importants ?
+- Faut-il privilégier Genève même si l'offre est plus chère, ou accepter Nyon/Rolle en priorité ?
